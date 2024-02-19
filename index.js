@@ -4,10 +4,31 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
+var Varegrupper400 = false;
+
+process.argv.forEach(function(value, idx, array)
+{
+    console.log(idx + ": " + value );
+    if (value === "Varegrupper400")
+        Varegrupper400 = true;
+})
+
+console.log("MockServer starts with:");
+console.log("Varegrupper400:     " + Varegrupper400);
+
 app.get('/varegrupper', function(req, res) 
 {
-    const categories = '[{"id":"1","name":"Godteri"}]';
-    res.json({ message: JSON.parse(categories) }); 
+    if (Varegrupper400)
+    {
+        console.log("Feil /varegrupper: 400");
+        res.status(400).json({"errormsg":"Feil"}).send();
+    }
+    else
+    {
+        const categories = '[{"id":"1","name":"Godteri"}]';
+        res.json({ message: JSON.parse(categories) }); 
+    }
+
 });
 
 app.get('/kommuner', function(req, res) 
