@@ -4,24 +4,55 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-var Varegrupper400 = false;
+var status400 = false;
+var status401 = false;
+var status503 = false;
+var dberror = false;
 
 process.argv.forEach(function(value, idx, array)
 {
     console.log(idx + ": " + value );
-    if (value === "Varegrupper400")
-        Varegrupper400 = true;
+    if (value === "status400")
+        status400 = true;
+
+    if (value === "status401")
+        status401 = true;
+
+    if (value === "status503")
+        status503 = true;
+
+    if (value === "dberror")
+        dberror = true;
+
 })
 
 console.log("MockServer starts with:");
-console.log("Varegrupper400:     " + Varegrupper400);
+console.log("status400:     " + status400);
+console.log("status401:     " + status401);
+console.log("status503:     " + status503);
+console.log("dberror  :     " + dberror);
 
 app.get('/varegrupper', function(req, res) 
 {
-    if (Varegrupper400)
+    if (status400)
     {
         console.log("Feil /varegrupper: 400");
         res.status(400).json({"errormsg":"Feil"}).send();
+    }
+    else if (status401)
+    {
+        console.log("Feil /varegrupper: 401");
+        res.status(401).json({"errormsg":"Feil"}).send();
+    }
+    else if (status503)
+    {
+        console.log("Feil /varegrupper: 503");
+        res.status(503).json({"errormsg":"Feil"}).send();
+    }
+    else if (dberror)
+    {
+        console.log("Feil /varegrupper: dberror");
+        res.status(500).json({"errormsg":"Feil"}).send();
     }
     else
     {
@@ -108,8 +139,31 @@ app.put('/nyhandel', function(req, res)
 
 app.get('/kunder', function(req, res) 
 {
-    const users = '[{"id":"1","name":"Laura Tørrbjørkhaugen","isDeletable":0,"municipalityName":"Sandefjord","countyName":"Vestfold"}]';
-    res.json({ message: JSON.parse(users) }); 
+    if (status400)
+    {
+        console.log("Feil /kunder: 400");
+        res.status(400).json({"errormsg":"Feil"}).send();
+    }
+    else if (status401)
+    {
+        console.log("Feil /kunder: 401");
+        res.status(401).json({"errormsg":"Feil"}).send();
+    }
+    else if (status503)
+    {
+        console.log("Feil /kunder: 503");
+        res.status(503).json({"errormsg":"Feil"}).send();
+    }
+    else if (dberror)
+    {
+        console.log("Feil /kunder: dberror");
+        res.status(500).json({"errormsg":"Feil"}).send();
+    }
+    else
+    {
+        const customers = '[{"id":"1","name":"Laura Tørrbjørkhaugen","isDeletable":0,"municipalityName":"Sandefjord","countyName":"Vestfold"}]';
+        res.json({ message: JSON.parse(customers) }); 
+    }
 });
 
 app.delete('/slettkunde', function(req, res) 
