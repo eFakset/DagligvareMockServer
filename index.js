@@ -1,6 +1,7 @@
 const express = require("express");
 const url = require("url");
-const PORT = process.env.PORT || 3001;
+
+let PORT = 3001;
 
 const app = express();
 
@@ -11,7 +12,9 @@ var dberror = false;
 
 process.argv.forEach(function(value, idx, array)
 {
-    console.log(idx + ": " + value );
+    if (value.startsWith("port="))
+        PORT = value.substring(5);
+
     if (value === "status400")
         status400 = true;
 
